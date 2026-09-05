@@ -4,7 +4,7 @@
 --  - CI clones deps into ~/.local/share/nvim/site/pack/vendor/start/, which
 --    Neovim adds to the runtimepath automatically.
 --  - Local runs can point at a deps directory with $NEOTEST_TEST_DEPS
---    (containing mini.nvim/, nvim-nio/, nvim-treesitter/).
+--    (containing mini.test/, nvim-nio/, nvim-treesitter/).
 --  - The lazy.nvim-style $XDG_DATA_HOME/lazy/ paths are kept for developers.
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy"
@@ -12,7 +12,10 @@ local deps = vim.env.NEOTEST_TEST_DEPS
 
 vim.notify = print
 vim.opt.rtp:append(".")
-for _, name in ipairs({ "mini.nvim", "nvim-treesitter", "nvim-nio" }) do
+-- mini.test comes from the standalone nvim-mini/mini.test repo in CI; the
+-- extra "mini.nvim" entry is a no-op fallback for developers who have the
+-- full library in their lazy dir (both expose lua/mini/test.lua).
+for _, name in ipairs({ "mini.test", "mini.nvim", "nvim-treesitter", "nvim-nio" }) do
   if deps and deps ~= "" then
     vim.opt.rtp:append(deps .. "/" .. name)
   end
